@@ -1,0 +1,52 @@
+{{!
+    This file is part of Moodle - http://moodle.org/
+
+    Moodle is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    Moodle is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
+}}
+{{!
+    @template block_group_members/group_members
+
+    This template renders a simple progress bar.
+
+    Example context (json):
+    {
+        "groups": [ {
+            "name": "Group name",
+            "description": "Bla blah blah...",
+            "messagecount": 5,
+            'memberscount': 5,
+            'link': 'https://',
+            }
+        ]
+    }
+}}
+
+<div id="block-forum-groups-{{uniqid}}" class="block-forum-groups block-cards">
+    {{#groups}}
+        <div class="box-shadow rounded">
+            <div class="pt-2 d-flex flex-row">
+                <a href="{{link}}" class="pt-2">{{name}}</a>
+            </div>
+            <div class="d-flex flex-row border-bottom pb-2">
+                <div>
+                    {{#str}}messagescount, block_group_members, {{messagecount}}{{/str}}
+                </div>
+                <div class="p-l-1 p-r-1">-</div>
+                <div>
+                    {{#str}}memberscount, block_group_members, {{memberscount}}{{/str}}
+                </div>
+            </div>
+        </div>
+    {{/groups}}
+</div>
