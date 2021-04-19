@@ -47,6 +47,7 @@ class group_members implements renderable, templatable {
      * @var $groupid
      */
     protected $groupid = null;
+
     /**
      * group_members constructor.
      * Retrieve matching forum posts sorted in reverse order
@@ -73,18 +74,19 @@ class group_members implements renderable, templatable {
         $extrafields[] = 'imagealt';
         $allfields = 'u.id, ' . user_picture::fields('u', $extrafields);
 
-        $groupmembers  = groups_get_members($this->groupid, $allfields);
+        $groupmembers = groups_get_members($this->groupid, $allfields);
         $context = new \stdClass();
-        foreach($groupmembers as $member) {
+        foreach ($groupmembers as $member) {
             $context->members = [
-              'picture' =>  $renderer->user_picture($member),
+                'picture' => $renderer->user_picture($member),
                 'fullname' => fullname($member),
             ];
         }
-        $context->morelink = new moodle_url('/blocks/group_members/index.php', array(
-            'groupid'=>$this->groupid,
-            'returnurl' => $PAGE->url->out()
-        ));
+        $group = groups_get_group($this->groupid);
+        $context->morelink = (new moodle_url('/user/index.php?id=34&group=353', array(
+            'id' => $group->courseid,
+            'group' => $this->groupid
+        )))->out(false);
         return $context;
     }
 }

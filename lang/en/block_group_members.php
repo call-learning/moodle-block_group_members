@@ -26,5 +26,5 @@
 defined('MOODLE_INTERNAL') || die();
 
 $string['pluginname'] = 'Group Members';
-$string['memberscount'] = '{$a} Members';
-$string['messagescount'] = '{$a} Messages';
+$string['blocktitle'] = 'Group Members ({$a})';
+$string['displayall'] = 'Display all';

@@ -62,9 +62,7 @@ class block_group_members extends block_base {
         $this->content->icons = array();
         $this->content->footer = '';
 
-        // Get the current group id from the page or the current page param.
-        $groupid = optional_param('groupid', 0, PARAM_INT);
-
+        $groupid = $this->get_current_groupid();
         if (empty($groupid)) {
             // Try to guess from the page.
             if ($PAGE->pagetype === 'group-page') {
@@ -80,7 +78,6 @@ class block_group_members extends block_base {
                 get_string('cannotfindgroup', 'error'));
         }
         return $this->content;
-
     }
 
     /**
@@ -89,17 +86,25 @@ class block_group_members extends block_base {
      * The function is called immediatly after init().
      */
     public function specialization() {
-
+        $groupid = $this->get_current_groupid();
+        $groupcount = 0;
+        if ($groupid) {
+            $members = groups_get_members($groupid);
+            if ($members) {
+                $groupcount = count($members);
+            }
+        }
         // Load user defined title and make sure it's never empty.
         if (empty($this->config->title)) {
-            $this->title = get_string('pluginname', 'block_group_members');
+            $this->title = get_string('blocktitle', 'block_group_members', $groupcount);
         } else {
             // First check if the title is in fact a language string
             list($ls, $mod) = explode('|', $this->config->title);
             $this->title = $this->config->title;
             if (!empty($ls) && !empty($mod)) {
                 if (get_string_manager()->string_exists($ls, $mod)) {
-                    $this->title = get_string($ls, $mod);
+
+                    $this->title = get_string($ls, $mod, $groupcount);
                 }
             }
         }
@@ -130,7 +135,21 @@ class block_group_members extends block_base {
      */
     public function applicable_formats() {
         return array(
-            'mod-forum-view' => true,
+            'all' => true,
         );
+    }
+
+    protected function get_current_groupid() {
+        global $PAGE;
+        // Get the current group id from the page or the current page param.
+        $groupid = optional_param('groupid', 0, PARAM_INT);
+
+        if (empty($groupid)) {
+            // Try to guess from the page.
+            if ($PAGE->pagetype === 'group-page') {
+                $groupid = intval($PAGE->subpage);
+            }
+        }
+        return $groupid;
     }
 }

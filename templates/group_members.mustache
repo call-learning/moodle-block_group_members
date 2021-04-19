@@ -21,7 +21,7 @@
 
     Example context (json):
     {
-        "groups": [ {
+        "members": [ {
             "name": "Group name",
             "description": "Bla blah blah...",
             "messagecount": 5,
@@ -32,21 +32,22 @@
     }
 }}
 
-<div id="block-forum-groups-{{uniqid}}" class="block-forum-groups block-cards">
-    {{#groups}}
-        <div class="box-shadow rounded">
-            <div class="pt-2 d-flex flex-row">
-                <a href="{{link}}" class="pt-2">{{name}}</a>
+<div id="block-group-members-{{uniqid}}" class="block-group-members container box-shadow">
+    {{#members}}
+        <div class="box px-3 rounded row">
+            <div class="pt-2 col-2">
+                {{{picture}}}
             </div>
-            <div class="d-flex flex-row border-bottom pb-2">
-                <div>
-                    {{#str}}messagescount, block_group_members, {{messagecount}}{{/str}}
-                </div>
-                <div class="p-l-1 p-r-1">-</div>
-                <div>
-                    {{#str}}memberscount, block_group_members, {{memberscount}}{{/str}}
-                </div>
+            <div class="pt-2 col">
+                {{fullname}}
             </div>
         </div>
-    {{/groups}}
+    {{/members}}
+    {{#morelink}}
+        <div class="box px-3 row">
+            <div class="pt-2 col">
+                <a href="{{morelink}}">{{#str}}displayall, block_group_members{{/str}}</a>
+            </div>
+        </div>
+    {{/morelink}}
 </div>
