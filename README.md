@@ -1,8 +1,9 @@
 # Group Members #
 
-TODO Describe the plugin shortly here.
+[![Moodle plugin CI for Moodle 3.9 and 3.10](https://github.com/call-learning/moodle-block_group_members/actions/workflows/main.yml/badge.svg)](https://github.com/call-learning/moodle-block_group_members/actions/workflows/main.yml)
 
-TODO Provide more detailed description here.
+Display the list of the course group members in a course. This leads to the participant
+list page if user has access.
 
 ## License ##
 

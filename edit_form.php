@@ -33,6 +33,8 @@ class block_group_members_edit_form extends block_edit_form {
 
     /**
      * Extends the configuration form for block_group_members.
+     * @param object $mform
+     * @throws coding_exception
      */
     protected function specific_definition($mform) {
 

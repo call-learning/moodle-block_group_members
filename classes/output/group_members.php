@@ -58,16 +58,17 @@ class group_members implements renderable, templatable {
      */
     protected $context = null;
 
-
+    /**
+     * Default number of maximum members displayed.
+     */
     const DEFAULT_MAX_MEMBERS = 5;
 
     /**
      * group_members constructor.
      * Retrieve matching forum posts sorted in reverse order
      *
-     * @param \cm_info $coursemodule
-     * @throws \coding_exception
-     * @throws \dml_exception
+     * @param int $groupid
+     * @param bool $maxmembers
      */
     public function __construct($groupid, $maxmembers = false) {
         $this->groupid = $groupid;
@@ -105,7 +106,7 @@ class group_members implements renderable, templatable {
             global $USER;
             $ccourse = context_course::instance($PAGE->course->id);
             $canaccessallgroups = has_capability('moodle/site:accessallgroups', $ccourse);
-            $isingroup  = array_intersect_key([$this->groupid], groups_get_all_groups($PAGE->course->id, $USER->id));
+            $isingroup = array_intersect_key([$this->groupid], groups_get_all_groups($PAGE->course->id, $USER->id));
             if (!empty($isingroup) || $canaccessallgroups) {
                 $group = groups_get_group($this->groupid);
                 $context->morelink = (new moodle_url('/user/index.php', array(
@@ -114,7 +115,6 @@ class group_members implements renderable, templatable {
                 )))->out(false);
             }
         }
-        //}
         return $context;
     }
 }

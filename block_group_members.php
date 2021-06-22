@@ -47,7 +47,6 @@ class block_group_members extends block_base {
      * @return stdClass The block contents.
      */
     public function get_content() {
-        global $PAGE;
         if ($this->content !== null) {
             return $this->content;
         }
@@ -65,8 +64,8 @@ class block_group_members extends block_base {
         $groupid = $this->get_current_groupid();
         if (empty($groupid)) {
             // Try to guess from the page.
-            if ($PAGE->pagetype === 'group-page') {
-                $groupid = intval($PAGE->subpage);
+            if ($this->page->pagetype === 'group-page') {
+                $groupid = intval($this->page->subpage);
             }
         }
 
@@ -99,7 +98,7 @@ class block_group_members extends block_base {
         if (empty($this->config->title)) {
             $this->title = get_string('blocktitle', 'block_group_members', $groupcount);
         } else {
-            // First check if the title is in fact a language string
+            // First check if the title is in fact a language string.
             list($ls, $mod) = explode('|', $this->config->title);
             $this->title = $this->config->title;
             if (!empty($ls) && !empty($mod)) {
@@ -124,7 +123,7 @@ class block_group_members extends block_base {
      *
      * @return bool True if the global configuration is enabled.
      */
-    function has_config() {
+    public function has_config() {
         return true;
     }
 
@@ -139,15 +138,20 @@ class block_group_members extends block_base {
         );
     }
 
+    /**
+     * Get current group id (from the page)
+     *
+     * @return array|false|float|int|mixed|string|null
+     * @throws coding_exception
+     */
     protected function get_current_groupid() {
-        global $PAGE;
         // Get the current group id from the page or the current page param.
         $groupid = optional_param('groupid', 0, PARAM_INT);
 
         if (empty($groupid)) {
             // Try to guess from the page.
-            if ($PAGE->pagetype === 'group-page') {
-                $groupid = intval($PAGE->subpage);
+            if ($this->page->pagetype === 'group-page') {
+                $groupid = intval($this->page->subpage);
             }
         }
         return $groupid;
