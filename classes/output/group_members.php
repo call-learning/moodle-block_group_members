@@ -77,11 +77,14 @@ class group_members implements renderable, templatable {
         $groupmembers = groups_get_members($this->groupid, $allfields);
         $context = new \stdClass();
         foreach ($groupmembers as $member) {
-            $context->members = [
+            $context->members [] = [
                 'picture' => $renderer->user_picture($member),
                 'fullname' => fullname($member),
             ];
         }
+        uasort($context->members, function($m1, $m2) {
+            return strnatcmp($m1['fullname'], $m2['fullname']);
+        });
         $group = groups_get_group($this->groupid);
         $context->morelink = (new moodle_url('/user/index.php?id=34&group=353', array(
             'id' => $group->courseid,
