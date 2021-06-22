@@ -71,8 +71,9 @@ class block_group_members extends block_base {
         }
 
         if (!empty($groupid)) {
+            $maxmembers = $this->config->maxmembers;
             $renderer = $this->page->get_renderer('core');
-            $this->content->text = $renderer->render(new group_members($groupid));
+            $this->content->text = $renderer->render(new group_members($groupid, $maxmembers));
         } else {
             $this->content->text = \html_writer::span(
                 get_string('cannotfindgroup', 'error'));
@@ -103,7 +104,6 @@ class block_group_members extends block_base {
             $this->title = $this->config->title;
             if (!empty($ls) && !empty($mod)) {
                 if (get_string_manager()->string_exists($ls, $mod)) {
-
                     $this->title = get_string($ls, $mod, $groupcount);
                 }
             }

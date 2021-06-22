@@ -49,6 +49,19 @@ class group_members implements renderable, templatable {
     protected $groupid = null;
 
     /**
+     * @var $maxmembers
+     */
+    protected $maxmembers = 0;
+
+    /**
+     * @var $context
+     */
+    protected $context = null;
+
+
+    const DEFAULT_MAX_MEMBERS = 5;
+
+    /**
      * group_members constructor.
      * Retrieve matching forum posts sorted in reverse order
      *
@@ -56,8 +69,9 @@ class group_members implements renderable, templatable {
      * @throws \coding_exception
      * @throws \dml_exception
      */
-    public function __construct($groupid) {
+    public function __construct($groupid, $maxmembers = false) {
         $this->groupid = $groupid;
+        $this->maxmembers = $maxmembers ? $maxmembers : self::DEFAULT_MAX_MEMBERS;
     }
 
     /**
@@ -76,8 +90,9 @@ class group_members implements renderable, templatable {
 
         $groupmembers = groups_get_members($this->groupid, $allfields);
         $context = new \stdClass();
+        $context->members = [];
         foreach ($groupmembers as $member) {
-            $context->members [] = [
+            $context->members[] = [
                 'picture' => $renderer->user_picture($member),
                 'fullname' => fullname($member),
             ];
@@ -85,11 +100,21 @@ class group_members implements renderable, templatable {
         uasort($context->members, function($m1, $m2) {
             return strnatcmp($m1['fullname'], $m2['fullname']);
         });
-        $group = groups_get_group($this->groupid);
-        $context->morelink = (new moodle_url('/user/index.php?id=34&group=353', array(
-            'id' => $group->courseid,
-            'group' => $this->groupid
-        )))->out(false);
+        $context->members = array_slice($context->members, 0, $this->maxmembers);
+        if ($PAGE->course) {
+            global $USER;
+            $ccourse = context_course::instance($PAGE->course->id);
+            $canaccessallgroups = has_capability('moodle/site:accessallgroups', $ccourse);
+            $isingroup  = array_intersect_key([$this->groupid], groups_get_all_groups($PAGE->course->id, $USER->id));
+            if (!empty($isingroup) || $canaccessallgroups) {
+                $group = groups_get_group($this->groupid);
+                $context->morelink = (new moodle_url('/user/index.php', array(
+                    'id' => $group->courseid,
+                    'group' => $this->groupid
+                )))->out(false);
+            }
+        }
+        //}
         return $context;
     }
 }

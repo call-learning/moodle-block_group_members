@@ -28,3 +28,5 @@ defined('MOODLE_INTERNAL') || die();
 $string['pluginname'] = 'Membres du groupe';
 $string['blocktitle'] = 'Membres du groupe ({$a})';
 $string['displayall'] = 'Afficher tous';
+$string['maxmembers'] = 'Nombre maximum de membre affichés dans le groupe';
+$string['title'] = 'Titre pour le bloc';
