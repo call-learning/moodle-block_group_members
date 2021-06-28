@@ -70,7 +70,8 @@ class block_group_members extends block_base {
         }
 
         if (!empty($groupid)) {
-            $maxmembers = $this->config->maxmembers;
+            $maxmembers = empty($this->config->maxmembers) ? \block_group_members\output\group_members::DEFAULT_MAX_MEMBERS :
+                $this->config->maxmembers;
             $renderer = $this->page->get_renderer('core');
             $this->content->text = $renderer->render(new group_members($groupid, $maxmembers));
         } else {
