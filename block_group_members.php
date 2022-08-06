@@ -99,12 +99,14 @@ class block_group_members extends block_base {
         if (empty($this->config->title)) {
             $this->title = get_string('blocktitle', 'block_group_members', $groupcount);
         } else {
-            // First check if the title is in fact a language string.
-            list($ls, $mod) = explode('|', $this->config->title);
             $this->title = $this->config->title;
-            if (!empty($ls) && !empty($mod)) {
-                if (get_string_manager()->string_exists($ls, $mod)) {
-                    $this->title = get_string($ls, $mod, $groupcount);
+            if (strpos($this->config->title, '|') !== false) {
+                // First check if the title is in fact a language string.
+                list($ls, $mod) = explode('|', $this->config->title);
+                if (!empty($ls) && !empty($mod)) {
+                    if (get_string_manager()->string_exists($ls, $mod)) {
+                        $this->title = get_string($ls, $mod, $groupcount);
+                    }
                 }
             }
         }

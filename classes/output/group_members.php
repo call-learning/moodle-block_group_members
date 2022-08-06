@@ -101,12 +101,13 @@ class group_members implements renderable, templatable {
         uasort($context->members, function($m1, $m2) {
             return strnatcmp($m1['fullname'], $m2['fullname']);
         });
+        $context->memberscount = count($context->members);
         $context->members = array_slice($context->members, 0, $this->maxmembers);
         if ($PAGE->course) {
             global $USER;
             $ccourse = context_course::instance($PAGE->course->id);
             $canaccessallgroups = has_capability('moodle/site:accessallgroups', $ccourse);
-            $isingroup = array_intersect_key([$this->groupid], groups_get_all_groups($PAGE->course->id, $USER->id));
+            $isingroup = array_intersect_key([$this->groupid => 1], groups_get_all_groups($PAGE->course->id, $USER->id));
             if (!empty($isingroup) || $canaccessallgroups) {
                 $group = groups_get_group($this->groupid);
                 $context->morelink = (new moodle_url('/user/index.php', array(

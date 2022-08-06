@@ -47,7 +47,14 @@
     {{#morelink}}
         <div class="box px-3 row">
             <div class="pt-2 col">
-                <a href="{{morelink}}">{{#str}}displayall, block_group_members{{/str}}</a>
+                <a href="{{morelink}}">{{#str}}displayall, block_group_members, {{memberscount}}{{/str}}</a>
+            </div>
+        </div>
+    {{/morelink}}
+    {{^morelink}}
+        <div class="box px-3 row">
+            <div class="pt-2 col">
+                <span>{{#str}}membersmessage, block_group_members, {{memberscount}}{{/str}}</span>
             </div>
         </div>
     {{/morelink}}

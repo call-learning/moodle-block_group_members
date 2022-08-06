@@ -27,6 +27,7 @@ defined('MOODLE_INTERNAL') || die();
 
 $string['pluginname'] = 'Group Members';
 $string['blocktitle'] = 'Group Members ({$a})';
-$string['displayall'] = 'Display all';
+$string['displayall'] = 'Display all ({$a})';
+$string['membersmessage'] = '{$a} users registered. Join the group to see everything...';
 $string['maxmembers'] = 'Max members displayed in the block';
 $string['title'] = 'Title for the block';
