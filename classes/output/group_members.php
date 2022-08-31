@@ -23,7 +23,6 @@
  */
 
 namespace block_group_members\output;
-defined('MOODLE_INTERNAL') || die();
 
 use context_course;
 use context_helper;
@@ -44,6 +43,11 @@ use user_picture;
  */
 class group_members implements renderable, templatable {
     /**
+     * Default number of maximum members displayed.
+     */
+    const DEFAULT_MAX_MEMBERS = 5;
+
+    /**
      * @var $groupid
      */
     protected $groupid = null;
@@ -54,24 +58,21 @@ class group_members implements renderable, templatable {
     protected $maxmembers = 0;
 
     /**
-     * @var $context
+     * @var $courseid
      */
-    protected $context = null;
-
-    /**
-     * Default number of maximum members displayed.
-     */
-    const DEFAULT_MAX_MEMBERS = 5;
+    protected $courseid = null;
 
     /**
      * group_members constructor.
      * Retrieve matching forum posts sorted in reverse order
      *
+     * @param int $courseid
      * @param int $groupid
-     * @param bool $maxmembers
+     * @param int $maxmembers
      */
-    public function __construct($groupid, $maxmembers = false) {
+    public function __construct(int $courseid, int $groupid, int $maxmembers = self::DEFAULT_MAX_MEMBERS) {
         $this->groupid = $groupid;
+        $this->courseid = $courseid;
         $this->maxmembers = $maxmembers ? $maxmembers : self::DEFAULT_MAX_MEMBERS;
     }
 
@@ -82,14 +83,13 @@ class group_members implements renderable, templatable {
      * @return object
      * @throws \coding_exception
      */
-    public function export_for_template(renderer_base $renderer) {
+    public function export_for_template(renderer_base $renderer): object {
         global $PAGE;
         $extrafields = get_extra_user_fields($PAGE->context);
         $extrafields[] = 'picture';
         $extrafields[] = 'imagealt';
         $allfields = 'u.id, ' . user_picture::fields('u', $extrafields);
-
-        $groupmembers = groups_get_members($this->groupid, $allfields);
+        $groupmembers = get_enrolled_users(context_course::instance($this->courseid), '', $this->groupid, $allfields);
         $context = new \stdClass();
         $context->members = [];
         foreach ($groupmembers as $member) {

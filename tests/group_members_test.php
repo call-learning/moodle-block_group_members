@@ -21,10 +21,10 @@
  * @copyright   2021 CALL Learning <laurent@call-learning.fr>
  * @license     https://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-
+namespace block_group_members;
+use advanced_testcase;
 use block_group_members\output\group_members;
-
-defined('MOODLE_INTERNAL') || die();
+use coding_exception;
 
 /**
  * Class block_group_members
@@ -33,11 +33,12 @@ defined('MOODLE_INTERNAL') || die();
  * @copyright   2021 CALL Learning <laurent@call-learning.fr>
  * @license     https://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-class group_members_testcase extends advanced_testcase {
+class group_members_test extends advanced_testcase {
     /**
      * Group member list
      *
      * @throws coding_exception
+     * @covers \block_group_members\output\group_members
      */
     public function test_get_group_member_list() {
         global $OUTPUT, $PAGE;
@@ -52,14 +53,15 @@ class group_members_testcase extends advanced_testcase {
             $this->getDataGenerator()->enrol_user($user->id, $course->id);
             groups_add_member($group[rand(0, 1000) % 2]->id, $user);
         }
-        $gm = new group_members($group[0]->id);
+        $gm = new group_members($course->id, $group[0]->id);
         $context = $gm->export_for_template($PAGE->get_renderer('core'));
         $this->assertCount(5, $context->members);
-        $gm = new group_members($group[0]->id, 3);
+        $gm = new group_members($course->id, $group[0]->id, 3);
         $context = $gm->export_for_template($OUTPUT);
         $this->assertCount(3, $context->members);
     }
 
 }
+
 
 

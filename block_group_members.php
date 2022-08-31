@@ -73,7 +73,7 @@ class block_group_members extends block_base {
             $maxmembers = empty($this->config->maxmembers) ? \block_group_members\output\group_members::DEFAULT_MAX_MEMBERS :
                 $this->config->maxmembers;
             $renderer = $this->page->get_renderer('core');
-            $this->content->text = $renderer->render(new group_members($groupid, $maxmembers));
+            $this->content->text = $renderer->render(new group_members($this->page->course->id ?? 1, $groupid, $maxmembers));
         } else {
             $this->content->text = \html_writer::span(
                 get_string('cannotfindgroup', 'error'));
