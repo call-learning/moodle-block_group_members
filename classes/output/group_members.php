@@ -24,15 +24,14 @@
 
 namespace block_group_members\output;
 
+use coding_exception;
 use context_course;
-use context_helper;
-use context_module;
-use core_course\external\course_summary_exporter;
+use core_user\fields;
 use moodle_url;
 use renderable;
 use renderer_base;
+use stdClass;
 use templatable;
-use user_picture;
 
 /**
  * Block group_members is defined here.
@@ -73,7 +72,7 @@ class group_members implements renderable, templatable {
     public function __construct(int $courseid, int $groupid, int $maxmembers = self::DEFAULT_MAX_MEMBERS) {
         $this->groupid = $groupid;
         $this->courseid = $courseid;
-        $this->maxmembers = $maxmembers ? $maxmembers : self::DEFAULT_MAX_MEMBERS;
+        $this->maxmembers = $maxmembers ?: self::DEFAULT_MAX_MEMBERS;
     }
 
     /**
@@ -81,16 +80,21 @@ class group_members implements renderable, templatable {
      *
      * @param renderer_base $renderer
      * @return object
-     * @throws \coding_exception
+     * @throws coding_exception
      */
     public function export_for_template(renderer_base $renderer): object {
         global $PAGE;
-        $extrafields = get_extra_user_fields($PAGE->context);
+        $extrafields = fields::for_identity($PAGE->context, false)->get_required_fields();
         $extrafields[] = 'picture';
         $extrafields[] = 'imagealt';
-        $allfields = 'u.id, ' . user_picture::fields('u', $extrafields);
+
+        $userfields = fields::for_userpic();
+        $userfields->including(...$extrafields);
+        $selects = $userfields->get_sql('u', false, '', 'id', false)->selects;
+
+        $allfields = 'u.id, ' . str_replace(', ', ',', $selects);
         $groupmembers = get_enrolled_users(context_course::instance($this->courseid), '', $this->groupid, $allfields);
-        $context = new \stdClass();
+        $context = new stdClass();
         $context->members = [];
         foreach ($groupmembers as $member) {
             $context->members[] = [
