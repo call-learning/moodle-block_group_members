@@ -84,11 +84,11 @@ class group_members implements renderable, templatable {
      */
     public function export_for_template(renderer_base $renderer): object {
         global $PAGE;
-        $extrafields = fields::for_identity($PAGE->context, false)->get_required_fields();
+        $extrafields = \core_user\fields::for_identity($PAGE->context, false)->get_required_fields();
         $extrafields[] = 'picture';
         $extrafields[] = 'imagealt';
 
-        $userfields = fields::for_userpic();
+        $userfields = \core_user\fields::for_userpic();
         $userfields->including(...$extrafields);
         $selects = $userfields->get_sql('u', false, '', 'id', false)->selects;
 
