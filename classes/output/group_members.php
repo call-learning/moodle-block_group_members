@@ -26,12 +26,14 @@ namespace block_group_members\output;
 
 use coding_exception;
 use context_course;
+use core_reportbuilder\local\helpers\user_profile_fields;
 use core_user\fields;
 use moodle_url;
 use renderable;
 use renderer_base;
 use stdClass;
 use templatable;
+use user_picture;
 
 /**
  * Block group_members is defined here.
@@ -84,15 +86,10 @@ class group_members implements renderable, templatable {
      */
     public function export_for_template(renderer_base $renderer): object {
         global $PAGE;
-        $extrafields = \core_user\fields::for_identity($PAGE->context, false)->get_required_fields();
+        $extrafields = get_extra_user_fields($PAGE->context);
         $extrafields[] = 'picture';
         $extrafields[] = 'imagealt';
-
-        $userfields = \core_user\fields::for_userpic();
-        $userfields->including(...$extrafields);
-        $selects = $userfields->get_sql('u', false, '', 'id', false)->selects;
-
-        $allfields = 'u.id, ' . str_replace(', ', ',', $selects);
+        $allfields = 'u.id, ' . user_picture::fields('u', $extrafields);
         $groupmembers = get_enrolled_users(context_course::instance($this->courseid), '', $this->groupid, $allfields);
         $context = new stdClass();
         $context->members = [];
