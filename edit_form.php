@@ -22,6 +22,8 @@
  * @license     https://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
+use block_group_members\output\group_members;
+
 /**
  * Form for editing block_group_members block instances.
  *
@@ -47,7 +49,7 @@ class block_group_members_edit_form extends block_edit_form {
         $mform->setDefault('config_title', get_string('pluginname', 'block_group_members'));
         $mform->setType('config_title', PARAM_TEXT);
         $mform->addElement('text', 'config_maxmembers', get_string('maxmembers', 'block_group_members'));
-        $mform->setDefault('config_maxmembers', \block_group_members\output\group_members::DEFAULT_MAX_MEMBERS);
+        $mform->setDefault('config_maxmembers', group_members::DEFAULT_MAX_MEMBERS);
         $mform->setType('config_maxmembers', PARAM_INT);
     }
 }

@@ -24,13 +24,14 @@
 
 namespace block_group_members\output;
 
+use coding_exception;
 use context_course;
-use context_helper;
-use context_module;
-use core_course\external\course_summary_exporter;
+use core_reportbuilder\local\helpers\user_profile_fields;
+use core_user\fields;
 use moodle_url;
 use renderable;
 use renderer_base;
+use stdClass;
 use templatable;
 use user_picture;
 
@@ -73,7 +74,7 @@ class group_members implements renderable, templatable {
     public function __construct(int $courseid, int $groupid, int $maxmembers = self::DEFAULT_MAX_MEMBERS) {
         $this->groupid = $groupid;
         $this->courseid = $courseid;
-        $this->maxmembers = $maxmembers ? $maxmembers : self::DEFAULT_MAX_MEMBERS;
+        $this->maxmembers = $maxmembers ?: self::DEFAULT_MAX_MEMBERS;
     }
 
     /**
@@ -81,7 +82,7 @@ class group_members implements renderable, templatable {
      *
      * @param renderer_base $renderer
      * @return object
-     * @throws \coding_exception
+     * @throws coding_exception
      */
     public function export_for_template(renderer_base $renderer): object {
         global $PAGE;
@@ -90,7 +91,7 @@ class group_members implements renderable, templatable {
         $extrafields[] = 'imagealt';
         $allfields = 'u.id, ' . user_picture::fields('u', $extrafields);
         $groupmembers = get_enrolled_users(context_course::instance($this->courseid), '', $this->groupid, $allfields);
-        $context = new \stdClass();
+        $context = new stdClass();
         $context->members = [];
         foreach ($groupmembers as $member) {
             $context->members[] = [

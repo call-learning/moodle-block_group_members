@@ -47,7 +47,7 @@ class group_members_test extends advanced_testcase {
         $group = [];
         $group[0] = $this->getDataGenerator()->create_group(['courseid' => $course->id]);
         $group[1] = $this->getDataGenerator()->create_group(['courseid' => $course->id]);
-        // 10 users in each groups.
+        // 10 users in each group.
         for ($i = 0; $i < 20; $i++) {
             $user = $this->getDataGenerator()->create_user();
             $this->getDataGenerator()->enrol_user($user->id, $course->id);
