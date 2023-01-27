@@ -28,4 +28,4 @@ $plugin->component = 'block_group_members';
 $plugin->release = '0.1.1';
 $plugin->version = 2022083103;
 $plugin->requires = 2020061500;
-$plugin->maturity = MATURITY_ALPHA;
+$plugin->maturity = MATURITY_STABLE;
