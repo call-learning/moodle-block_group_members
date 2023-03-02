@@ -26,7 +26,6 @@ namespace block_group_members\output;
 
 use coding_exception;
 use context_course;
-use core_user\fields;
 use moodle_url;
 use renderable;
 use renderer_base;
@@ -84,16 +83,11 @@ class group_members implements renderable, templatable {
      */
     public function export_for_template(renderer_base $output): object {
         global $PAGE;
-        $extrafields = fields::for_identity($PAGE->context, false)->get_required_fields();
+        $extrafields = get_extra_user_fields($PAGE->context);
         $extrafields[] = 'picture';
         $extrafields[] = 'imagealt';
-        // Use of core\user API instead of user_picture::fields().
-        $userfields = fields::for_userpic();
-        $userfields->including(...$extrafields);
 
-        $allfields = $userfields->get_sql('u', false, '', 'id', false)->selects;
-        // Maintain legacy behaviour where the field list was done with 'implode' and no spaces.
-        $allfields = str_replace(', ', ',', $allfields);
+        $allfields = 'u.id, ' . user_picture::fields('u', $extrafields);
 
         $groupmembers = get_enrolled_users(context_course::instance($this->courseid), '', $this->groupid, $allfields);
         $context = new stdClass();
