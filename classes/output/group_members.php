@@ -18,7 +18,7 @@
  * Block group_members is defined here.
  *
  * @package     block_group_members
- * @copyright   2021 CALL Learning <laurent@call-learning.fr>
+ * @copyright   2023 CALL Learning <laurent@call-learning.fr>
  * @license     https://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
@@ -26,8 +26,6 @@ namespace block_group_members\output;
 
 use coding_exception;
 use context_course;
-use core_reportbuilder\local\helpers\user_profile_fields;
-use core_user\fields;
 use moodle_url;
 use renderable;
 use renderer_base;
@@ -39,7 +37,6 @@ use user_picture;
  * Block group_members is defined here.
  *
  * @package     block_group_members
- * @copyright   2021 CALL Learning <laurent@call-learning.fr>
  * @license     https://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 class group_members implements renderable, templatable {
@@ -80,22 +77,24 @@ class group_members implements renderable, templatable {
     /**
      * Export featured course data
      *
-     * @param renderer_base $renderer
+     * @param renderer_base $output
      * @return object
      * @throws coding_exception
      */
-    public function export_for_template(renderer_base $renderer): object {
+    public function export_for_template(renderer_base $output): object {
         global $PAGE;
         $extrafields = get_extra_user_fields($PAGE->context);
         $extrafields[] = 'picture';
         $extrafields[] = 'imagealt';
+
         $allfields = 'u.id, ' . user_picture::fields('u', $extrafields);
+
         $groupmembers = get_enrolled_users(context_course::instance($this->courseid), '', $this->groupid, $allfields);
         $context = new stdClass();
         $context->members = [];
         foreach ($groupmembers as $member) {
             $context->members[] = [
-                'picture' => $renderer->user_picture($member),
+                'picture' => $output->user_picture($member),
                 'fullname' => fullname($member),
             ];
         }
