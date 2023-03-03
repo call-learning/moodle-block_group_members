@@ -18,7 +18,7 @@
  * Form for editing group_members block instances.
  *
  * @package     block_group_members
- * @copyright   2021 CALL Learning <laurent@call-learning.fr>
+ * @copyright   2023 CALL Learning <laurent@call-learning.fr>
  * @license     https://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
@@ -28,7 +28,6 @@ use block_group_members\output\group_members;
  * Form for editing block_group_members block instances.
  *
  * @package    block_group_members
- * @copyright  2021 CALL Learning <laurent@call-learning.fr>
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 class block_group_members_edit_form extends block_edit_form {

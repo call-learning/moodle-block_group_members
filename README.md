@@ -5,7 +5,18 @@
 Display the list of the course group members in a course. This leads to the participant
 list page if user has access.
 
-## License ##
+### Usage
+1. Add this block into the sidebar of a course
+2. Make sure that the course's group mode isn't set to **"No groups"** or you'll get the message "Unable to find group"
+
+
+### Supported Moodle versions
+
+This block supports several of the latest Moodle versions.
+
+You can safely use this block with Moodle **4.1**, **4.0**, **3.11**, **3.10**, **3.9**
+
+### License ##
 
 2021 CALL Learning <laurent@call-learning.fr>
 
