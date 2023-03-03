@@ -18,7 +18,7 @@
  * Block group_members is defined here.
  *
  * @package     block_group_members
- * @copyright   2021 CALL Learning <laurent@call-learning.fr>
+ * @copyright   2023 CALL Learning <laurent@call-learning.fr>
  * @license     https://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
@@ -28,10 +28,12 @@ use block_group_members\output\group_members;
  * group_members block.
  *
  * @package    block_group_members
- * @copyright  2021 CALL Learning <laurent@call-learning.fr>
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 class block_group_members extends block_base {
+
+    /** @var int NOGROUPID The value returned when we didn't find any group id */
+    const NOGROUPID = -1;
 
     /**
      * Initializes class member variables.
@@ -62,15 +64,10 @@ class block_group_members extends block_base {
         $this->content->footer = '';
 
         $groupid = $this->get_current_groupid();
-        if (empty($groupid)) {
-            // Try to guess from the page.
-            if ($this->page->pagetype === 'group-page') {
-                $groupid = intval($this->page->subpage);
-            }
-        }
 
         if (!empty($groupid)) {
-            $maxmembers = empty($this->config->maxmembers) ? group_members::DEFAULT_MAX_MEMBERS :
+            $maxmembers = empty($this->config->maxmembers) ?
+                group_members::DEFAULT_MAX_MEMBERS :
                 $this->config->maxmembers;
             $renderer = $this->page->get_renderer('core');
             $this->content->text = $renderer->render(new group_members($this->page->course->id ?? 1, $groupid, $maxmembers));
@@ -147,16 +144,9 @@ class block_group_members extends block_base {
      * @return array|false|float|int|mixed|string|null
      * @throws coding_exception
      */
-    protected function get_current_groupid() {
-        // Get the current group id from the page or the current page param.
-        $groupid = optional_param('groupid', 0, PARAM_INT);
-
-        if (empty($groupid)) {
-            // Try to guess from the page.
-            if ($this->page->pagetype === 'group-page') {
-                $groupid = intval($this->page->subpage);
-            }
-        }
+    public function get_current_groupid() {
+        global $COURSE, $USER;
+        $groupid = groups_get_course_group($COURSE);
         return $groupid;
     }
 }

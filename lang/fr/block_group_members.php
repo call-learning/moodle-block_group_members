@@ -30,4 +30,8 @@ $string['blocktitle'] = 'Membres du groupe ({$a})';
 $string['displayall'] = 'Afficher tous ({$a})';
 $string['membersmessage'] = '{$a} utilisateurs inscrits. Rejoignez le groupe pour tout voir...';
 $string['maxmembers'] = 'Nombre maximum de membre affichés dans le groupe';
-$string['title'] = 'Titre pour le bloc';
+$string['title'] = 'Titre du bloc';
+
+$string['privacy:metadata'] = 'Le bloc "Group members" ne stocke aucune donnée.';
+$string['forum_groups:myaddinstance'] = 'Ajouter un bloc "Group members" à mon moodle.';
+$string['forum_groups:addinstance'] = 'Ajouter un bloc "Group members".';

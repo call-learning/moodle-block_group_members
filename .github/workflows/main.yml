@@ -7,20 +7,20 @@ on: [pull_request, push]
 
 jobs:
   test:
-    runs-on: 'ubuntu-18.04'
+    runs-on: 'ubuntu-20.04'
     strategy:
       fail-fast: false
       matrix:
         include:
-          - php: '7.2'
-            moodle-branch: 'MOODLE_39_STABLE'
+          - php: '7.4'
+            moodle-branch: 'MOODLE_311_STABLE'
             database: 'mariadb'
-          - php: '7.2'
-            moodle-branch: 'MOODLE_39_STABLE'
+          - php: '7.4'
+            moodle-branch: 'MOODLE_400_STABLE'
             database: 'pgsql'
           - php: '7.4'
-            moodle-branch: 'MOODLE_310_STABLE'
-            database: 'mariadb'
+            moodle-branch: 'MOODLE_401_STABLE'
+            database: 'pgsql'
     services:
       postgres:
         image: postgres
@@ -53,7 +53,7 @@ jobs:
       - name: Install node
         uses: actions/setup-node@v1
         with:
-          node-version: '14.15.0'
+          node-version: '18.14.2'
 
       - name: Setup PHP
         uses: shivammathur/setup-php@v2
