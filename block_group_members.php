@@ -145,8 +145,7 @@ class block_group_members extends block_base {
      * @throws coding_exception
      */
     public function get_current_groupid() {
-        global $COURSE, $USER;
-        $groupid = groups_get_course_group($COURSE);
-        return $groupid;
+        global $COURSE;
+        return groups_get_user_groups($COURSE->id)[0][0];
     }
 }
