@@ -33,5 +33,5 @@ $string['maxmembers'] = 'Max members displayed in the block';
 $string['title'] = 'Title for the block';
 
 $string['privacy:metadata'] = 'The "Group members" block doesn"t sotre any data.';
-$string['forum_groups:myaddinstance'] = 'Add a "Group members" block to my moodle.';
-$string['forum_groups:addinstance'] = 'Add a "Group members" block.';
+$string['group_members:myaddinstance'] = 'Add a "Group members" block to my moodle.';
+$string['group_members:addinstance'] = 'Add a "Group members" block.';
